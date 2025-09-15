@@ -1,0 +1,323 @@
+# CTO Coach Project - Cursor Rules
+
+## Project Overview
+This is a CTO Coach application with:
+- Frontend: React web chat UI
+- Backend: Node.js API
+- Agents: Google ADK implementation  
+- LLM: Gemini
+- Database: PostgreSQL data lake
+- Architecture: ETL agents + Conversational agents
+
+## Code Standards & Guidelines
+
+### 1. Commit Standards - Conventional Commits
+Follow https://www.conventionalcommits.org/en/v1.0.0/
+
+**Format:** `<type>[optional scope]: <description>`
+
+**Types:**
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools
+
+**Examples:**
+```
+feat(chat): add real-time message streaming
+fix(etl): resolve data transformation error
+docs(api): update endpoint documentation
+refactor(agents): improve knowledge retrieval logic
+```
+
+### 2. Versioning - Semantic Versioning
+Follow https://semver.org/
+
+**Format:** MAJOR.MINOR.PATCH
+- **MAJOR**: Incompatible API changes
+- **MINOR**: Backwards-compatible functionality additions
+- **PATCH**: Backwards-compatible bug fixes
+
+### 3. Code Review Standards
+Follow https://google.github.io/eng-practices/review/
+
+**As a Code Author:**
+- Keep changes small and focused
+- Write clear descriptions
+- Respond to feedback constructively
+- Test thoroughly before requesting review
+
+**As a Code Reviewer:**
+- Focus on correctness, clarity, and consistency
+- Be constructive and specific in feedback
+- Approve when code meets standards
+- Consider maintainability and performance
+
+### 4. JavaScript/TypeScript Standards
+Follow https://github.com/airbnb/javascript with project-specific adaptations
+
+## Technology-Specific Rules
+
+### React Frontend
+```javascript
+// Use functional components with hooks
+const ChatInterface = ({ messages, onSendMessage }) => {
+  const [input, setInput] = useState('');
+  
+  // Handle async operations properly
+  const handleSendMessage = useCallback(async (message) => {
+    try {
+      await onSendMessage(message);
+      setInput('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  }, [onSendMessage]);
+
+  return (
+    <div className="chat-interface">
+      {/* Component JSX */}
+    </div>
+  );
+};
+```
+
+**React Rules:**
+- Use TypeScript for all new components
+- Prefer functional components over class components
+- Use custom hooks for shared logic
+- Implement proper error boundaries
+- Use React.memo for performance optimization when needed
+- Follow naming convention: PascalCase for components, camelCase for functions/variables
+
+### Node.js Backend
+```javascript
+// Use async/await for asynchronous operations
+const express = require('express');
+const { Pool } = require('pg');
+
+class ChatService {
+  constructor(dbPool) {
+    this.db = dbPool;
+  }
+
+  async processMessage(message) {
+    try {
+      // Validate input
+      if (!message || typeof message !== 'string') {
+        throw new Error('Invalid message format');
+      }
+
+      // Process with proper error handling
+      const result = await this.db.query(
+        'INSERT INTO messages (content, timestamp) VALUES ($1, $2) RETURNING id',
+        [message, new Date()]
+      );
+
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error processing message:', error);
+      throw error;
+    }
+  }
+}
+```
+
+**Node.js Rules:**
+- Use TypeScript for all new backend code
+- Implement proper error handling with try-catch blocks
+- Use environment variables for configuration
+- Implement request validation and sanitization
+- Use connection pooling for database connections
+- Follow RESTful API design principles
+
+### Google ADK Agents
+```javascript
+// ETL Agent Implementation
+class ExtractorAgent {
+  constructor(config) {
+    this.config = config;
+    this.sources = config.dataSources || [];
+  }
+
+  async extractDocuments() {
+    const results = [];
+    
+    for (const source of this.sources) {
+      try {
+        const documents = await this.extractFromSource(source);
+        results.push(...documents);
+      } catch (error) {
+        console.error(`Failed to extract from ${source.url}:`, error);
+        // Continue with other sources
+      }
+    }
+
+    return results;
+  }
+
+  async extractFromSource(source) {
+    // Implementation specific to source type
+    // Return standardized document format
+  }
+}
+```
+
+**Agent Rules:**
+- Implement proper error handling and recovery
+- Use structured logging for debugging
+- Follow single responsibility principle
+- Implement retry logic for external API calls
+- Use configuration-driven behavior
+
+### Database (PostgreSQL)
+```sql
+-- Use descriptive table and column names
+CREATE TABLE knowledge_documents (
+    id SERIAL PRIMARY KEY,
+    source_url VARCHAR(500) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    topic VARCHAR(100),
+    content TEXT NOT NULL,
+    references JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes for performance
+CREATE INDEX idx_knowledge_documents_topic ON knowledge_documents(topic);
+CREATE INDEX idx_knowledge_documents_source ON knowledge_documents(source_url);
+```
+
+**Database Rules:**
+- Use snake_case for table and column names
+- Always include created_at and updated_at timestamps
+- Use appropriate data types and constraints
+- Create indexes for frequently queried columns
+- Use migrations for schema changes
+- Implement proper backup and recovery procedures
+
+## Code Quality Standards
+
+### Linting & Formatting
+```json
+// .eslintrc.js
+module.exports = {
+  extends: [
+    'airbnb',
+    'airbnb-typescript',
+    '@typescript-eslint/recommended'
+  ],
+  rules: {
+    // Project-specific overrides
+    'react/react-in-jsx-scope': 'off',
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'warn'
+  }
+};
+```
+
+### Unit Testing
+```javascript
+// Use Jest for testing
+describe('ChatService', () => {
+  let chatService;
+  let mockDb;
+
+  beforeEach(() => {
+    mockDb = {
+      query: jest.fn()
+    };
+    chatService = new ChatService(mockDb);
+  });
+
+  it('should process valid message', async () => {
+    const message = 'Hello, world!';
+    const expectedResult = { id: 1 };
+    
+    mockDb.query.mockResolvedValue({ rows: [expectedResult] });
+
+    const result = await chatService.processMessage(message);
+
+    expect(result).toEqual(expectedResult);
+    expect(mockDb.query).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT INTO messages'),
+      [message, expect.any(Date)]
+    );
+  });
+
+  it('should throw error for invalid message', async () => {
+    await expect(chatService.processMessage(null))
+      .rejects.toThrow('Invalid message format');
+  });
+});
+```
+
+**Testing Rules:**
+- Aim for 80%+ code coverage
+- Write unit tests for all business logic
+- Use integration tests for API endpoints
+- Mock external dependencies
+- Test both happy path and error scenarios
+- Use descriptive test names
+
+### File Organization
+```
+src/
+├── components/          # React components
+│   ├── common/         # Reusable components
+│   ├── chat/          # Chat-specific components
+│   └── admin/         # Admin interface components
+├── services/           # Business logic services
+├── agents/            # Google ADK agent implementations
+├── utils/             # Utility functions
+├── types/             # TypeScript type definitions
+├── hooks/             # Custom React hooks
+├── constants/         # Application constants
+└── __tests__/         # Test files
+```
+
+### Documentation
+- Use JSDoc for function documentation
+- Maintain README.md for each major module
+- Document API endpoints with OpenAPI/Swagger
+- Include setup and deployment instructions
+- Document environment variables and configuration
+
+### Security
+- Validate all user inputs
+- Use parameterized queries to prevent SQL injection
+- Implement proper authentication and authorization
+- Store sensitive data in environment variables
+- Use HTTPS for all communications
+- Implement rate limiting for APIs
+
+### Performance
+- Implement caching where appropriate
+- Use database indexes for query optimization
+- Optimize bundle size for frontend
+- Implement lazy loading for large components
+- Monitor and log performance metrics
+
+## Git Workflow
+1. Create feature branches from main: `feature/description`
+2. Make atomic commits with conventional commit messages
+3. Rebase before creating pull requests
+4. Require code review approval before merging
+5. Use squash and merge for clean history
+6. Delete feature branches after merging
+
+## Environment Setup
+- Use Node.js LTS version
+- Use npm for package management
+- Configure pre-commit hooks for linting and testing
+- Use environment-specific configuration files
+- Document all required environment variables
+
+---
+
+Remember: Code should be readable, maintainable, and testable. When in doubt, favor clarity over cleverness.

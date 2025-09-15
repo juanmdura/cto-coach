@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { ChatResponse, ChatSession } from '../types/chat';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -9,19 +10,7 @@ const apiClient = axios.create({
   },
 });
 
-export interface ChatResponse {
-  response: string;
-  sources: Array<{
-    id: number;
-    title: string;
-    relevantContent: string;
-  }>;
-  sessionId: string;
-  timestamp: string;
-}
-
-export interface SessionResponse {
-  sessionId: string;
+export interface SessionResponse extends ChatSession {
   createdAt: string;
 }
 

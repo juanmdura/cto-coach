@@ -1,3 +1,4 @@
+// Environment variables are loaded by tsx --env-file flag
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';

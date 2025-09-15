@@ -3,18 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { chatService } from '../services/chatService';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
-
-export interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  sources?: Array<{
-    id: number;
-    title: string;
-    relevantContent: string;
-  }>;
-  timestamp: string;
-}
+import type { Message } from '../types/chat';
 
 export const ChatInterface: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>('');

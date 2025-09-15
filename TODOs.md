@@ -2,7 +2,7 @@
 
 ## MVP Implementation Tasks
 
-### Week 1: Foundation & Setup
+### 1: Foundation & Setup
 - [ ] Create project structure (backend + frontend)
 - [ ] Set up PostgreSQL database with Docker
 - [ ] Create basic database schema (documents, chat_sessions, messages)
@@ -12,7 +12,7 @@
 - [ ] Implement basic file upload API for documents
 - [ ] Create simple document storage functionality
 
-### Week 2: AI Integration
+### 2: AI Integration
 - [ ] Set up Gemini API integration
 - [ ] Create chat API endpoints (POST /api/chat/message)
 - [ ] Implement basic text search in documents (SQL LIKE queries)
@@ -21,7 +21,7 @@
 - [ ] Add basic error handling
 - [ ] Test AI responses with simple queries
 
-### Week 3: Knowledge Base Integration
+### 3: Knowledge Base Integration
 - [ ] Improve document storage and retrieval
 - [ ] Implement context building from relevant documents
 - [ ] Enhance AI responses with document references
@@ -30,7 +30,7 @@
 - [ ] Test AI responses referencing uploaded content
 - [ ] Add source citations in AI responses
 
-### Week 4: Polish & Deploy
+### 4: Polish & Deploy
 - [ ] Improve UI/UX with Tailwind CSS
 - [ ] Add loading states and better error handling
 - [ ] Create Docker setup for deployment

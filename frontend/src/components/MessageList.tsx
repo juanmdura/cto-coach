@@ -24,20 +24,28 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
             
             {/* Sources */}
             {message.sources && message.sources.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <div className="text-xs font-medium text-gray-600 mb-2">
-                  Referenced documents:
+              <div className="mt-3 pt-3 border-t border-opacity-20">
+                <div className="text-xs font-medium mb-2 opacity-80">
+                  📚 Referenced from {message.sources.length} document{message.sources.length > 1 ? 's' : ''}:
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {message.sources.map((source) => (
                     <div
                       key={source.id}
-                      className="text-xs bg-white rounded p-2 border"
+                      className={`text-xs rounded-lg p-3 border ${
+                        message.role === 'user'
+                          ? 'bg-white bg-opacity-20 border-white border-opacity-30'
+                          : 'bg-white border-gray-200'
+                      }`}
                     >
-                      <div className="font-medium text-gray-900">
-                        {source.title}
+                      <div className={`font-medium ${
+                        message.role === 'user' ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        📄 {source.title}
                       </div>
-                      <div className="text-gray-600 mt-1">
+                      <div className={`mt-1 text-xs ${
+                        message.role === 'user' ? 'text-white text-opacity-80' : 'text-gray-600'
+                      }`}>
                         {source.relevantContent}
                       </div>
                     </div>

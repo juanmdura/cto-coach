@@ -1,9 +1,9 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { createError } from '../middleware/errorHandler';
 
 export class GeminiService {
   private client: GoogleGenerativeAI;
-  private model: unknown;
+  private model: GenerativeModel;
 
   constructor() {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -18,7 +18,7 @@ export class GeminiService {
   async generateResponse(context: string): Promise<string> {
     try {
       const result = await this.model.generateContent(context);
-      const response = await result.response;
+      const response = result.response;
       const text = response.text();
 
       if (!text) {

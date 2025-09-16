@@ -26,7 +26,17 @@
   "devDependencies": {
     "concurrently": "^9.1.0"
   },
-  "keywords": ["cto", "coach", "ai", "engineering", "leadership"],
+  "keywords": [
+    "cto",
+    "coach",
+    "ai",
+    "engineering",
+    "leadership"
+  ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "form-data": "^4.0.4",
+    "node-fetch": "^3.3.2"
+  }
 }

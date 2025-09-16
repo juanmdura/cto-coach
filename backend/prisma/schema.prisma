@@ -11,15 +11,23 @@ datasource db {
 }
 
 model Document {
-  id         Int      @id @default(autoincrement())
-  title      String   @db.VarChar(255)
-  content    String   @db.Text
-  sourceUrl  String?  @map("source_url") @db.VarChar(500)
-  filePath   String?  @map("file_path") @db.VarChar(500)
-  fileType   String?  @map("file_type") @db.VarChar(50)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  content     String   @db.Text
+  summary     String?  @db.Text
+  sourceUrl   String?  @map("source_url") @db.VarChar(500)
+  filePath    String?  @map("file_path") @db.VarChar(500)
+  fileType    String?  @map("file_type") @db.VarChar(50)
+  category    String?  @db.VarChar(100)
+  tags        String[] @default([])
+  wordCount   Int?     @map("word_count")
+  isProcessed Boolean  @default(false) @map("is_processed")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
+  @@index([category])
+  @@index([isProcessed])
+  @@index([createdAt])
   @@map("documents")
 }
 

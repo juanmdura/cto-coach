@@ -38,15 +38,43 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
                           : 'bg-white border-gray-200'
                       }`}
                     >
-                      <div className={`font-medium ${
-                        message.role === 'user' ? 'text-white' : 'text-gray-900'
-                      }`}>
-                        📄 {source.title}
-                      </div>
-                      <div className={`mt-1 text-xs ${
-                        message.role === 'user' ? 'text-white text-opacity-80' : 'text-gray-600'
-                      }`}>
-                        {source.relevantContent}
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className={`font-medium ${
+                            message.role === 'user' ? 'text-white' : 'text-gray-900'
+                          }`}>
+                            📄 {source.title}
+                          </div>
+                          
+                          {(source.category || source.tags?.length) && (
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              {source.category && (
+                                <span className={`px-2 py-1 rounded text-xs ${
+                                  message.role === 'user' 
+                                    ? 'bg-white bg-opacity-30 text-white' 
+                                    : 'bg-blue-100 text-blue-800'
+                                }`}>
+                                  {source.category}
+                                </span>
+                              )}
+                              {source.tags?.slice(0, 2).map((tag) => (
+                                <span key={tag} className={`px-2 py-1 rounded text-xs ${
+                                  message.role === 'user' 
+                                    ? 'bg-white bg-opacity-20 text-white' 
+                                    : 'bg-green-100 text-green-800'
+                                }`}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          
+                          <div className={`mt-2 text-xs ${
+                            message.role === 'user' ? 'text-white text-opacity-80' : 'text-gray-600'
+                          }`}>
+                            {source.relevantContent}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}

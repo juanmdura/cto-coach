@@ -6,6 +6,9 @@ export interface Message {
     id: number;
     title: string;
     relevantContent: string;
+    category?: string;
+    tags?: string[];
+    summary?: string;
   }>;
   timestamp: string;
 }
@@ -20,6 +23,9 @@ export interface ChatResponse {
     id: number;
     title: string;
     relevantContent: string;
+    category?: string;
+    tags?: string[];
+    summary?: string;
   }>;
   sessionId: string;
   timestamp: string;

@@ -11,9 +11,11 @@ interface Document {
 const fetchDocuments = async (): Promise<Document[]> => {
   const response = await fetch('http://localhost:3000/api/documents');
   if (!response.ok) {
-    throw new Error('Failed to fetch documents');
+    throw new Error(`Failed to fetch documents: ${response.status}`);
   }
-  return response.json();
+  const data = await response.json();
+  console.log('API Response:', data); // Debug log
+  return data.documents || [];
 };
 
 const deleteDocument = async (id: number): Promise<void> => {
@@ -35,6 +37,8 @@ export const DocumentList: React.FC = () => {
   } = useQuery({
     queryKey: ['documents'],
     queryFn: fetchDocuments,
+    retry: 1,
+    staleTime: 30000, // 30 seconds
   });
 
   const deleteMutation = useMutation({
@@ -93,7 +97,10 @@ export const DocumentList: React.FC = () => {
     );
   }
 
-  if (documents.length === 0) {
+  // Ensure documents is an array
+  const documentList = Array.isArray(documents) ? documents : [];
+
+  if (documentList.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
         <div className="text-4xl mb-2">📚</div>
@@ -106,11 +113,11 @@ export const DocumentList: React.FC = () => {
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-medium text-gray-900 mb-3">
-        Uploaded Documents ({documents.length})
+        Uploaded Documents ({documentList.length})
       </h4>
       
       <div className="space-y-2 max-h-64 overflow-y-auto">
-        {documents.map((doc) => (
+        {documentList.map((doc) => (
           <div
             key={doc.id}
             className="flex items-center justify-between p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"

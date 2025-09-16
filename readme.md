@@ -88,8 +88,8 @@ React Frontend ↔ Node.js Backend ↔ Gemini AI
 ```
 cto-coach/
 ├── .cursorrules          # Coding standards and practices
-├── TODO.md              # Development tasks and progress
-├── SYSTEM-DESIGN.md     # Technical documentation
+├── TODOs.md             # Development tasks and progress
+├── system-design.md     # Technical documentation
 ├── readme.md            # This file
 ├── backend/             # Node.js API server
 ├── frontend/            # React application
@@ -100,7 +100,7 @@ cto-coach/
 
 **Current Phase**: Foundation & Setup
 
-See [`TODO.md`](./TODO.md) for detailed task breakdown and progress tracking.
+See [`TODOs.md`](./TODOs.md) for detailed task breakdown and progress tracking.
 
 **MVP Timeline**: 4 weeks
 - Week 1: Foundation & Setup ⏳
@@ -110,8 +110,8 @@ See [`TODO.md`](./TODO.md) for detailed task breakdown and progress tracking.
 
 ## 📖 Documentation
 
-- **[TODO.md](./TODO.md)** - Development tasks and progress tracking
-- **[SYSTEM-DESIGN.md](./SYSTEM-DESIGN.md)** - Complete technical documentation including:
+- **[TODOs.md](./TODOs.md)** - Development tasks and progress tracking
+- **[system-design.md](./system-design.md)** - Complete technical documentation including:
   - System architecture diagrams
   - Database schema
   - API specifications
@@ -142,8 +142,8 @@ After MVP completion, planned enhancements include:
 ## 🤝 Contributing
 
 1. Follow the coding standards in `.cursorrules`
-2. Check `TODO.md` for available tasks
-3. Reference `SYSTEM-DESIGN.md` for technical details
+2. Check `TODOs.md` for available tasks
+3. Reference `system-design.md` for technical details
 4. Use conventional commit messages
 5. Ensure tests pass before submitting PRs
 

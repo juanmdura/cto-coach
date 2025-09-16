@@ -35,17 +35,41 @@ export class DocumentController {
 
   async getDocuments(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const documents = await prisma.document.findMany({
-        select: {
-          id: true,
-          title: true,
-          fileType: true,
-          sourceUrl: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-        orderBy: { createdAt: 'desc' },
-      });
+      const { category, tags, search } = req.query;
+      
+      let documents;
+      
+      if (search && typeof search === 'string') {
+        // Use search functionality
+        const tagArray = tags ? (Array.isArray(tags) ? tags as string[] : [tags as string]) : undefined;
+        documents = await this.documentService.searchDocuments(
+          search,
+          50, // Get more results for listing
+          category as string,
+          tagArray
+        );
+      } else if (category && typeof category === 'string') {
+        // Get documents by category
+        documents = await this.documentService.getDocumentsByCategory(category);
+      } else {
+        // Get all documents
+        documents = await prisma.document.findMany({
+          where: { isProcessed: true },
+          select: {
+            id: true,
+            title: true,
+            fileType: true,
+            sourceUrl: true,
+            category: true,
+            tags: true,
+            summary: true,
+            wordCount: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+      }
 
       res.json({
         documents,
@@ -102,6 +126,24 @@ export class DocumentController {
         message: 'Document deleted successfully',
         id: documentId,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCategories(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const categories = await this.documentService.getDocumentCategories();
+      res.json({ categories });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTags(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const tags = await this.documentService.getDocumentTags();
+      res.json({ tags });
     } catch (error) {
       next(error);
     }

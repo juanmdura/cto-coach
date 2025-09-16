@@ -35,8 +35,14 @@ const upload = multer({
 // Upload document
 router.post('/upload', upload.single('document'), documentController.uploadDocument.bind(documentController));
 
-// Get all documents
+// Get all documents (with optional search, category, and tags filters)
 router.get('/', documentController.getDocuments.bind(documentController));
+
+// Get document categories
+router.get('/categories', documentController.getCategories.bind(documentController));
+
+// Get document tags
+router.get('/tags', documentController.getTags.bind(documentController));
 
 // Get specific document
 router.get('/:id', documentController.getDocument.bind(documentController));

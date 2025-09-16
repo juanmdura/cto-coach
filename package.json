@@ -15,6 +15,7 @@
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "cd backend && npm test",
     "test:frontend": "cd frontend && npm test",
+    "seed:docs": "cd backend && node ../scripts/add-sample-docs.js",
     "lint": "npm run lint:backend && npm run lint:frontend",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint",
@@ -25,7 +26,17 @@
   "devDependencies": {
     "concurrently": "^9.1.0"
   },
-  "keywords": ["cto", "coach", "ai", "engineering", "leadership"],
+  "keywords": [
+    "cto",
+    "coach",
+    "ai",
+    "engineering",
+    "leadership"
+  ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "form-data": "^4.0.4",
+    "node-fetch": "^3.3.2"
+  }
 }
